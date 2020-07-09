@@ -49,3 +49,6 @@ The image below is the set of activies inside the <b>Until</b> loop activity tha
 ## Limitations
 * SPN has to be used for submitting refresh due to the use of the Lookup activity, which does not support MSI authentication. For a similar approach that leverages MSI, please refer to this <a href="https://github.com/furmangg/automating-azure-analysis-services#processazureas">example</a>.
 * No error handling provided. This is a base example of submitting and concluding an asynchronous refresh.
+
+## License
+MIT
