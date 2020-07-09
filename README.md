@@ -39,3 +39,7 @@ There are well documented approaches for using Azure Logic Apps and Azure Automa
 ![Refresh AAS Data Factory Pipeline](https://github.com/jondobrzeniecki/RefreshAASwithADF/blob/master/img/RefreshAASPipeline.jpg?raw=true)
 
 ![Refresh AAS Until Loop Data Factory Pipeline](https://github.com/jondobrzeniecki/RefreshAASwithADF/blob/master/img/RefreshAASPipelineUntilLoop.jpg?raw=true)
+
+## Limitations
+* SPN has to be used for submitting refresh due to the use of the Lookup activity, which does not support MSI authentication. For a similar approach that leverages MSI, please refer to this <a href="https://github.com/furmangg/automating-azure-analysis-services#processazureas">example</a>.
+* No error handling provided. This is a base example of submitting and concluding an asynchronous refresh.
