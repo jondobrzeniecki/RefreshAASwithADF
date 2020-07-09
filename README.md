@@ -51,4 +51,4 @@ The image below is the set of activies inside the <b>Until</b> loop activity tha
 * No error handling provided. This is a base example of submitting and concluding an asynchronous refresh.
 
 ## License
-MIT
+<a href="https://github.com/jondobrzeniecki/RefreshAASwithADF/blob/master/LICENSE">MIT</a>
