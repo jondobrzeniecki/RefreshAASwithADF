@@ -1,0 +1,351 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "factoryName": {
+            "type": "string",
+            "metadata": "Data Factory name",
+            "defaultValue": ""
+        },
+        "aasRegion": {
+            "type": "string",
+            "metadata": "Azure Analysis Server Region",
+            "defaultValue": ""
+        },
+        "aasServer": {
+            "type": "string",
+            "metadata": "Azure Analysis Server Name",
+            "defaultValue": ""
+        },
+        "aasModel": {
+            "type": "string",
+            "metadata": "Azure Analysis Server Model",
+            "defaultValue": ""
+        },
+        "tenantSecretIdentifier": {
+            "type": "string",
+            "metadata": "Key Vault SecretIdentifier for Tenant ID",
+            "defaultValue": ""
+        },
+        "clientIdSecretIdentifier": {
+            "type": "string",
+            "metadata": "Key Vault SecretIdentifier for Client ID",
+            "defaultValue": ""
+        },
+        "clientSecretSecretIdentifier": {
+            "type": "string",
+            "metadata": "Key Vault SecretIdentifier for Client Secret",
+            "defaultValue": ""
+        }
+    },
+    "variables": {
+        "factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+    },
+    "resources": [
+        {
+            "name": "[concat(parameters('factoryName'), '/Refresh AAS')]",
+            "type": "Microsoft.DataFactory/factories/pipelines",
+            "apiVersion": "2018-06-01",
+            "properties": {
+                "activities": [
+                    {
+                        "name": "Request Token",
+                        "type": "WebActivity",
+                        "dependsOn": [
+                            {
+                                "activity": "Get Tenant ID",
+                                "dependencyConditions": [
+                                    "Succeeded"
+                                ]
+                            },
+                            {
+                                "activity": "Get Client ID",
+                                "dependencyConditions": [
+                                    "Succeeded"
+                                ]
+                            },
+                            {
+                                "activity": "Get Client Secret",
+                                "dependencyConditions": [
+                                    "Succeeded"
+                                ]
+                            }
+                        ],
+                        "policy": {
+                            "timeout": "7.00:00:00",
+                            "retry": 0,
+                            "retryIntervalInSeconds": 30,
+                            "secureOutput": true,
+                            "secureInput": true
+                        },
+                        "userProperties": [],
+                        "typeProperties": {
+                            "url": {
+                                "value": "@concat('https://login.microsoftonline.com/',activity('Get Tenant ID').output.value,'/oauth2/token')",
+                                "type": "Expression"
+                            },
+                            "method": "POST",
+                            "headers": {
+                                "Content-Type": "application/x-www-form-urlencoded"
+                            },
+                            "body": {
+                                "value": "@concat('grant_type=client_credentials&client_id=',activity('Get Client ID').output.value,'&client_secret=',activity('Get Client Secret').output.value,'&resource=https://*.asazure.windows.net')",
+                                "type": "Expression"
+                            }
+                        }
+                    },
+                    {
+                        "name": "Get Tenant ID",
+                        "type": "WebActivity",
+                        "dependsOn": [],
+                        "policy": {
+                            "timeout": "7.00:00:00",
+                            "retry": 0,
+                            "retryIntervalInSeconds": 30,
+                            "secureOutput": true,
+                            "secureInput": true
+                        },
+                        "userProperties": [],
+                        "typeProperties": {
+                            "url": "[concat(parameters('tenantSecretIdentifier'),'?api-version=7.0')]",
+                            "method": "GET",
+                            "headers": {},
+                            "authentication": {
+                                "type": "MSI",
+                                "resource": "https://vault.azure.net"
+                            }
+                        }
+                    },
+                    {
+                        "name": "Get Client ID",
+                        "type": "WebActivity",
+                        "dependsOn": [],
+                        "policy": {
+                            "timeout": "7.00:00:00",
+                            "retry": 0,
+                            "retryIntervalInSeconds": 30,
+                            "secureOutput": true,
+                            "secureInput": true
+                        },
+                        "userProperties": [],
+                        "typeProperties": {
+                            "url": "[concat(parameters('clientIdSecretIdentifier'),'?api-version=7.0')]",
+                            "method": "GET",
+                            "headers": {},
+                            "authentication": {
+                                "type": "MSI",
+                                "resource": "https://vault.azure.net"
+                            }
+                        }
+                    },
+                    {
+                        "name": "Get Client Secret",
+                        "type": "WebActivity",
+                        "dependsOn": [],
+                        "policy": {
+                            "timeout": "7.00:00:00",
+                            "retry": 0,
+                            "retryIntervalInSeconds": 30,
+                            "secureOutput": true,
+                            "secureInput": true
+                        },
+                        "userProperties": [],
+                        "typeProperties": {
+                            "url": "[concat(parameters('clientSecretSecretIdentifier'),'?api-version=7.0')]",
+                            "method": "GET",
+                            "headers": {},
+                            "authentication": {
+                                "type": "MSI",
+                                "resource": "https://vault.azure.net"
+                            }
+                        }
+                    },
+                    {
+                        "name": "Async Refresh",
+                        "type": "Until",
+                        "dependsOn": [
+                            {
+                                "activity": "Submit Refresh",
+                                "dependencyConditions": [
+                                    "Succeeded"
+                                ]
+                            }
+                        ],
+                        "userProperties": [],
+                        "typeProperties": {
+                            "expression": {
+                                "value": "@equals(variables('varRefreshComplete'),true)",
+                                "type": "Expression"
+                            },
+                            "activities": [
+                                {
+                                    "name": "Refresh Progress",
+                                    "type": "WebActivity",
+                                    "dependsOn": [
+                                        {
+                                            "activity": "Wait",
+                                            "dependencyConditions": [
+                                                "Succeeded"
+                                            ]
+                                        }
+                                    ],
+                                    "policy": {
+                                        "timeout": "7.00:00:00",
+                                        "retry": 0,
+                                        "retryIntervalInSeconds": 30,
+                                        "secureOutput": false,
+                                        "secureInput": true
+                                    },
+                                    "userProperties": [],
+                                    "typeProperties": {
+                                        "url": {  
+                                            "value": "[concat('@concat(''https://',parameters('aasRegion'),'.asazure.windows.net/servers/',parameters('aasServer'),'/models/',parameters('aasModel'),'/refreshes/'', activity(''Submit Refresh'').output.firstRow.operationId)')]",
+                                            "type": "Expression"
+                                        },
+                                        "method": "GET",
+                                        "headers": {
+                                            "Authorization": {
+                                                "value": "@concat('Bearer ', activity('Request Token').output.access_token)",
+                                                "type": "Expression"
+                                            }
+                                        }
+                                    }
+                                },
+                                {
+                                    "name": "If Condition",
+                                    "type": "IfCondition",
+                                    "dependsOn": [
+                                        {
+                                            "activity": "Refresh Progress",
+                                            "dependencyConditions": [
+                                                "Succeeded"
+                                            ]
+                                        }
+                                    ],
+                                    "userProperties": [],
+                                    "typeProperties": {
+                                        "expression": {
+                                            "value": "@equals(activity('Refresh Progress').output.status,'succeeded')",
+                                            "type": "Expression"
+                                        },
+                                        "ifTrueActivities": [
+                                            {
+                                                "name": "Set varRefreshComplete",
+                                                "type": "SetVariable",
+                                                "dependsOn": [],
+                                                "userProperties": [],
+                                                "typeProperties": {
+                                                    "variableName": "varRefreshComplete",
+                                                    "value": true
+                                                }
+                                            }
+                                        ]
+                                    }
+                                },
+                                {
+                                    "name": "Wait",
+                                    "type": "Wait",
+                                    "dependsOn": [],
+                                    "userProperties": [],
+                                    "typeProperties": {
+                                        "waitTimeInSeconds": 5
+                                    }
+                                }
+                            ],
+                            "timeout": "7.00:00:00"
+                        }
+                    },
+                    {
+                        "name": "Submit Refresh",
+                        "type": "Lookup",
+                        "dependsOn": [
+                            {
+                                "activity": "Request Token",
+                                "dependencyConditions": [
+                                    "Succeeded"
+                                ]
+                            }
+                        ],
+                        "policy": {
+                            "timeout": "7.00:00:00",
+                            "retry": 0,
+                            "retryIntervalInSeconds": 30,
+                            "secureOutput": false,
+                            "secureInput": true
+                        },
+                        "userProperties": [],
+                        "typeProperties": {
+                            "source": {
+                                "type": "JsonSource",
+                                "storeSettings": {
+                                    "type": "HttpReadSettings",
+                                    "requestMethod": "POST",
+                                    "additionalHeaders": {
+                                        "value": "@{concat('Content-Type: application/json\nAuthorization: Bearer ', activity('Request Token').output.access_token)}",
+                                        "type": "Expression"
+                                    },
+                                    "requestBody": "{\n\t\"Type\": \"clearValues\",\n\t\"CommitMode\": \"default\",\n\t\"MaxParallelism\": 2,\n\t\"RetryCount\": 2,\n\t\"Objects\": []\n}",
+                                    "requestTimeout": ""
+                                },
+                                "formatSettings": {
+                                    "type": "JsonReadSettings"
+                                }
+                            },
+                            "dataset": {
+                                "referenceName": "SubmitRefreshResponse",
+                                "type": "DatasetReference",
+                                "parameters": {}
+                            }
+                        }
+                    }
+                ],
+                "variables": {
+                    "varRefreshComplete": {
+                        "type": "Boolean"
+                    }
+                },
+                "annotations": []
+            },
+            "dependsOn": [
+                "[concat(variables('factoryId'), '/datasets/SubmitRefreshResponse')]"
+            ]
+        },
+        {
+            "name": "[concat(parameters('factoryName'), '/SubmitRefreshResponse')]",
+            "type": "Microsoft.DataFactory/factories/datasets",
+            "apiVersion": "2018-06-01",
+            "properties": {
+                "linkedServiceName": {
+                    "referenceName": "AASRefreshServer",
+                    "type": "LinkedServiceReference"
+                },
+                "annotations": [],
+                "type": "Json",
+                "typeProperties": {
+                    "location": {
+                        "type": "HttpServerLocation"
+                    }
+                },
+                "schema": {}
+            },
+            "dependsOn": [
+                "[concat(variables('factoryId'), '/linkedServices/AASRefreshServer')]"
+            ]
+        },
+        {
+            "name": "[concat(parameters('factoryName'), '/AASRefreshServer')]",
+            "type": "Microsoft.DataFactory/factories/linkedServices",
+            "apiVersion": "2018-06-01",
+            "properties": {
+                "annotations": [],
+                "type": "HttpServer",
+                "typeProperties": {
+                    "url": "[concat('https://',parameters('aasRegion'),'.asazure.windows.net/servers/',parameters('aasServer'),'/models/',parameters('aasModel'),'/refreshes/')]",
+                    "enableServerCertificateValidation": false,
+                    "authenticationType": "Anonymous"
+                }
+            },
+            "dependsOn": []
+        }
+    ]
+}
