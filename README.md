@@ -15,7 +15,7 @@ There are well documented approaches for using Azure Logic Apps and Azure Automa
 
 <b>Step 1:</b> Use deployment button below to open ARM Template deployment page in Azure Portal
 
-[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fjondobrzeniecki%2FRefreshAASwithADF%2Fmaster%2Farm_template.json)
+   [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fjondobrzeniecki%2FRefreshAASwithADF%2Fmaster%2Farm_template.json)
 
 <b>Step 2:</b> Select the <b>Subscription</b>, <b>Resource Group</b> and <b>Region</b> that the data factory being deployed to resides in.
 
@@ -27,4 +27,4 @@ There are well documented approaches for using Azure Logic Apps and Azure Automa
 
 <b>Step 6:</b> Supply the <b>Secret Identifier</b> parameters with the corresponding values from Step 5.
 
-<b>Step 7:</b> Press review and create!
+<b>Step 7:</b> Press <b>Review + create</b> button!
