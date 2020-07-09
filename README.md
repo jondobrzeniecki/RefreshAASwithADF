@@ -2,6 +2,15 @@
 
 There are well documented approaches for using Azure Logic Apps and Azure Automation that you can then orchastrate with Azure Data Factory to refresh tabular models deployed to Azure Analysis Services. The approach covered in this document leverages only the Azure Analysis Services APIs for <a href="https://docs.microsoft.com/en-us/azure/analysis-services/analysis-services-async-refresh">asynchronous refresh</a> and Azure Data Factory pipeline activies to perform tabular model refreshes natively inside Azure Data Factory.  This simplifies implementation by removing the need for additional cloud services to accomplish the same goal.
 
+- [Table of Contents.](#refreshing-azure-analysis-services-models-using-only-azure-data-factory-pipelines)
+  * [Prerequisites](#prerequisites)
+  * [Deployed Data Factory Objects](#deployed-data-factory-objects)
+  * [Deployment](#deployment)
+  * [Data Factory Pipeline Overview](#data-factory-pipeline-overview)
+  * [Limitations](#limitations)
+  * [References](#references)
+  * [License](#license)
+
 ## Prerequisites
 * Create a Service Principal (SPN), see <a href="https://docs.microsoft.com/en-us/azure/active-directory/develop/howto-create-service-principal-portal#register-an-application-with-azure-ad-and-create-a-service-principal" target="_blank">here</a>.
 * Add SPN and Data Factory MI as an Analysis Services Administrator using SQL Server Management Studio (SSMS), see <a href="https://docs.microsoft.com/en-us/azure/analysis-services/analysis-services-addservprinc-admins#using-sql-server-management-studio" target="_blank">here</a>.
