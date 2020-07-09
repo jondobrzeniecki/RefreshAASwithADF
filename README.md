@@ -37,3 +37,5 @@ There are well documented approaches for using Azure Logic Apps and Azure Automa
 ## Data Factory Pipeline Overview
 
 ![Refresh AAS Data Factory Pipeline](https://github.com/jondobrzeniecki/RefreshAASwithADF/blob/master/img/RefreshAASPipeline.jpg?raw=true)
+
+![Refresh AAS Until Loop Data Factory Pipeline](https://github.com/jondobrzeniecki/RefreshAASwithADF/blob/master/img/RefreshAASPipelineUntilLoop.jpg?raw=true)
