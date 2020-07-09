@@ -50,5 +50,11 @@ The image below is the set of activies inside the <b>Until</b> loop activity tha
 * SPN has to be used for submitting refresh due to the use of the Lookup activity, which does not support MSI authentication. For a similar approach that leverages MSI, please refer to this <a href="https://github.com/furmangg/automating-azure-analysis-services#processazureas">example</a>.
 * No error handling provided. This is a base example of submitting and concluding an asynchronous refresh.
 
+## References
+
+* <a href="https://docs.microsoft.com/en-us/azure/analysis-services/analysis-services-async-refresh">Asynchronous refresh with the REST API</a>
+* <a href="https://docs.microsoft.com/en-us/azure/data-factory/how-to-use-azure-key-vault-secrets-pipeline-activities">Use Azure Key Vault secrets in pipeline activities</a>
+* <a href="https://www.sqlsaturday.com/734/Sessions/Details.aspx?sid=77768">SQLSaturday - Automating Azure Analysis Services</a>
+
 ## License
 <a href="https://github.com/jondobrzeniecki/RefreshAASwithADF/blob/master/LICENSE">MIT</a>
