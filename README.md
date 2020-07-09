@@ -1,5 +1,6 @@
-# RefreshAASwithADF
-An approach using only Azure Data Factory pipelines for refreshing Azure Analysis Service tabular models.
+# Refreshing Azure Analysis Services models using only Azure Data Factory pipelines.
+
+There are well documented approaches for using Azure Logic Apps and Azure Automation that you can then orchastrate wit Azure Data Factory. This approach however leverages the Azure Analysis Services APIs for <a href="https://docs.microsoft.com/en-us/azure/analysis-services/analysis-services-async-refresh">asynchronous refresh</a> and Azure Data Factory pipeline activies to perform tabular model refreshes natively inside Azure Data Factory.
 
 
 ## Prerequisites
