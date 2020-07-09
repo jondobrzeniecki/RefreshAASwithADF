@@ -11,6 +11,11 @@ There are well documented approaches for using Azure Logic Apps and Azure Automa
 * Create Azure Key Vault access policy for Data Factory MI to <b>get</b> secrets, see <a href="https://docs.microsoft.com/en-us/azure/data-factory/how-to-use-azure-key-vault-secrets-pipeline-activities#steps" target="_blank">Steps 1 and 2 here</a>.
 * Add the Azure Tenant ID, SPN Client ID and SPN Client Secret to Azure Key Vault, see <a href="https://docs.microsoft.com/en-us/azure/key-vault/secrets/quick-create-portal#add-a-secret-to-key-vault" target="_blank">here</a>.
 
+## Deployed Data Factory Objects
+* Refresh AAS pipeline
+* SubmitRefreshResponse dataset
+* AASRefreshServer linked service
+
 ## Deployment
 
 <b>Step 1:</b> Use deployment button below to open ARM Template deployment page in Azure Portal
