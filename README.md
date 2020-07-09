@@ -33,3 +33,7 @@ There are well documented approaches for using Azure Logic Apps and Azure Automa
 <b>Step 6:</b> Supply the <b>Secret Identifier</b> parameters with the corresponding values from Step 5.
 
 <b>Step 7:</b> Press <b>Review + create</b> button!
+
+## Data Factory Pipeline Overview
+
+![Refresh AAS Data Factory Pipeline](https://github.com/jondobrzeniecki/RefreshAASwithADF/blob/master/img/RefreshAASPipeline.jpg?raw=true)
