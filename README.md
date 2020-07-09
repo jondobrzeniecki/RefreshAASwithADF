@@ -4,6 +4,7 @@ An approach using only Azure Data Factory pipelines for refreshing Azure Analysi
 
 ## Prerequisites
 <b>1.</b> Create a Service Principal (SPN), see <a href="https://docs.microsoft.com/en-us/azure/active-directory/develop/howto-create-service-principal-portal#register-an-application-with-azure-ad-and-create-a-service-principal" target="_blank">here</a>.
+
 <b>2.</b> Retrieve Data Factory Managed Identity (MI), see <a href="https://docs.microsoft.com/en-us/azure/data-factory/data-factory-service-identity#retrieve-managed-identity-using-azure-portal" target="_blank">here</a>. 
 *3. Add SPN and Data Factory MI as an Analysis Services Administrator using SQL Server Management Studio (SSMS), see <a href="https://docs.microsoft.com/en-us/azure/analysis-services/analysis-services-addservprinc-admins#using-sql-server-management-studio" target="_blank">here</a>.
 * Create Azure Key Vault, see <a href="https://docs.microsoft.com/en-us/azure/key-vault/secrets/quick-create-portal#create-a-vault" target="_blank">here</a>.
