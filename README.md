@@ -2,7 +2,6 @@
 
 There are well documented approaches for using Azure Logic Apps and Azure Automation that you can then orchastrate with Azure Data Factory to refresh tabular models deployed to Azure Analysis Services. The approach covered in this document leverages only the Azure Analysis Services APIs for <a href="https://docs.microsoft.com/en-us/azure/analysis-services/analysis-services-async-refresh">asynchronous refresh</a> and Azure Data Factory pipeline activies to perform tabular model refreshes natively inside Azure Data Factory.  This simplifies implementation by removing the need for additional cloud services to accomplish the same goal.
 
-
 ## Prerequisites
 * Create a Service Principal (SPN), see <a href="https://docs.microsoft.com/en-us/azure/active-directory/develop/howto-create-service-principal-portal#register-an-application-with-azure-ad-and-create-a-service-principal" target="_blank">here</a>.
 * Add SPN and Data Factory MI as an Analysis Services Administrator using SQL Server Management Studio (SSMS), see <a href="https://docs.microsoft.com/en-us/azure/analysis-services/analysis-services-addservprinc-admins#using-sql-server-management-studio" target="_blank">here</a>.
@@ -14,6 +13,18 @@ There are well documented approaches for using Azure Logic Apps and Azure Automa
 
 ## Deployment
 
-<b>Step 1:</b> Retrieve Key Vault Secret Identifiers for Azure Tenant ID, SPN Client ID and SPN Client Secret, see <a href="https://docs.microsoft.com/en-us/azure/data-factory/how-to-use-azure-key-vault-secrets-pipeline-activities#steps" target="_blank">Step 3 here</a>.
+<b>Step 1:</b> Use deployment button below to open ARM Template deployment page in Azure Portal
 
 [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fjondobrzeniecki%2FRefreshAASwithADF%2Fmaster%2Farm_template.json)
+
+<b>Step 2:</b> Select the <b>Subscription</b>, <b>Resource Group</b> and <b>Region</b> that the data factory being deployed to resides in.
+
+<b>Step 3:</b> Supply the <b>Factory Name</b> parameter with the name of the data factory being deployed to.
+
+<b>Step 4:</b> Supply the <b>Aas Region</b>, <b>Aas Server</b> and <b>Aas Model</b> parameters with the details of the Azure Analysis Service Tabular model.
+
+<b>Step 5:</b> Retrieve Key Vault <b>Secret Identifiers</b> for Azure Tenant ID, SPN Client ID and SPN Client Secret, see <a href="https://docs.microsoft.com/en-us/azure/data-factory/how-to-use-azure-key-vault-secrets-pipeline-activities#steps" target="_blank">Step 3 here</a>.
+
+<b>Step 6:</b> Supply the <b>Secret Identifier</b> parameters with the corresponding values from Step 5.
+
+<b>Step 7:</b> Press review and create!
