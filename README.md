@@ -45,7 +45,7 @@ There are well documented approaches for using Azure Logic Apps and Azure Automa
 
 ## Data Factory Pipeline Overview
 
-The Refresh AAS pipeline uses all native activites to authenticate with Azure, submit a refresh tabular model refresh request and then monitor refresh progress.  It orchestrates the approach covered in the <a href="https://docs.microsoft.com/en-us/azure/analysis-services/analysis-services-async-refresh">Asynchronous refresh with the REST API</a> document.
+The Refresh AAS pipeline uses all native activites to authenticate with Azure, submit a refresh tabular model refresh request and then monitor refresh progress.  It orchestrates the approach covered in the <a href="https://docs.microsoft.com/en-us/azure/analysis-services/analysis-services-async-refresh">Asynchronous refresh with the REST API</a> document. The default behavior of the refresh is to clear values of the entire tabular model specified during deployment.
 
 The <b>Lookup</b> activity is used to overcome a change in behavior experienced with the POST refresh API that is used to submit a refresh.  The <b>Web</b> activity response does not return an Operation ID as expected that is required to monitor the refresh progress in the <b>Until</b> loop activity.  Issuing the POST refresh API request using the <b>Lookup</b> activity returns the Operation ID as expected.
 
